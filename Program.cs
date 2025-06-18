@@ -21,6 +21,7 @@ if (!app.Environment.IsDevelopment())
   app.UseHsts();
 }
 app.UseRouting();
+app.MapControllers(); 
 
 app.UseEndpoints(endpoints =>
 {
@@ -39,6 +40,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=FileExplorer}/{action=Index}/{id?}");
+
+// If using Minimal APIs
 
 
 

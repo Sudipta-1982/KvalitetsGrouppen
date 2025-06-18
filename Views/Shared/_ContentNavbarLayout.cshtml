@@ -44,6 +44,8 @@
       @RenderSection("VendorScripts", required: false)
       @RenderSection("PageScripts", required: false)
       @RenderSection("Scripts", required: false)
+      @RenderSection("PageStyles", required: false)
+
 
       @if (isMenu)
       {
@@ -66,62 +68,61 @@
           <div class="offcanvas offcanvas-end" tabindex="-1" id="addCustomerOffcanvas"
             aria-labelledby="addCustomerLabel">
             <div class="offcanvas-header">
-              <h5 class="offcanvas-title" id="addCustomerLabel">Add New Customer</h5>
+              <h5 class="offcanvas-title" id="addCustomerLabel">Lägg till ny kund</h5>
               <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                 aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
               <form asp-action="AddCustomer" method="post" class="d-flex flex-column gap-3">
                 <div>
-                  <label class="form-label">Customer Name</label>
-                  <input type="text" class="form-control" name="CustomerName" placeholder="Enter Customer Name"
-                    required />
+                  <label class="form-label">Kundnamn</label>
+                  <input type="text" class="form-control" name="CustomerName" placeholder="Ange kundnamn" required />
                 </div>
                 <div>
-                  <label class="form-label">Customer ID</label>
-                  <input type="text" class="form-control" name="CustomerID" placeholder="Enter Customer ID" required />
+                  <label class="form-label">Kund-ID</label>
+                  <input type="text" class="form-control" name="CustomerID" placeholder="Ange kund-ID" required />
                 </div>
                 <div>
-                  <label class="form-label">Contact Person</label>
-                  <input type="text" class="form-control" name="ContactPerson" placeholder="Enter Contact Person" />
+                  <label class="form-label">Kontakt Person</label>
+                  <input type="text" class="form-control" name="ContactPerson" placeholder="Ange kontaktperson" />
                 </div>
                 <div>
-                  <label class="form-label">Email</label>
-                  <input type="email" class="form-control" name="Email" placeholder="Enter Email" />
+                  <label class="form-label">E-post</label>
+                  <input type="email" class="form-control" name="Email" placeholder="Ange e-postadress" />
                 </div>
                 <div>
-                  <label class="form-label">Website</label>
-                  <input type="url" class="form-control" name="Website" placeholder="Enter Website" />
+                  <label class="form-label">Webbplats</label>
+                  <input type="url" class="form-control" name="Website" placeholder="Ange webbplats" />
                 </div>
                 <div>
-                  <label class="form-label">Classification</label>
+                  <label class="form-label">Klassificering</label>
                   <select class="form-select" name="Classification">
-                    <option selected disabled>Choose...</option>
-                    <option value="A Customer">A Customer</option>
-                    <option value="B Customer">B Customer</option>
-                    <option value="C Customer">C Customer</option>
-                    <option value="D Customer">D Customer</option>
-                    <option value="Not Active">Not Active</option>
-                    <option value="Prospect">Prospect</option>
+                    <option selected disabled>Välja...</option>
+                    <option value="A Customer">A Kund</option>
+                    <option value="B Customer">B Kund</option>
+                    <option value="C Customer">C Kund</option>
+                    <option value="D Customer">D Kund</option>
+                    <option value="Not Active">Inte aktiv</option>
+                    <option value="Prospect">Utsikt</option>
                   </select>
                 </div>
                 <div>
-                  <label class="form-label">Satisfaction Level</label>
+                  <label class="form-label">Nöjdhetsnivå</label>
                   <select class="form-select" name="SatisfactionLevel">
-                    <option selected disabled>Select...</option>
-                    <option value="Satisfied">Satisfied</option>
-                    <option value="Not Satisfied">Not Satisfied</option>
-                    <option value="No Record">No Record</option>
+                    <option selected disabled>Välja...</option>
+                    <option value="Satisfied">Nöjd</option>
+                    <option value="Not Satisfied">Inte nöjd</option>
+                    <option value="No Record">Ingen post</option>
                   </select>
                 </div>
                 <div>
-                  <label class="form-label">Evaluation Date</label>
+                  <label class="form-label">Utvärderingsdatum</label>
                   <input type="date" class="form-control" name="EvaluationDate" />
                 </div>
                 <div class="d-flex justify-content-end gap-2 mt-4">
-                  <button type="submit" class="btn" style="background-color:#5C7CFA; color:white;">Submit</button>
+                  <button type="submit" class="btn" style="background-color:#5C7CFA; color:white;">Överlämna</button>
                   <button type="button" class="btn" style="background-color: #FFE4E6; color: #FF0000;"
-                    data-bs-dismiss="offcanvas">Cancel</button>
+                    data-bs-dismiss="offcanvas">Avboka</button>
                 </div>
               </form>
             </div>
@@ -130,6 +131,7 @@
           <!-- Content -->
           <div
             class='@ViewData["container"] @(Convert.ToBoolean(@ViewData["isFlex"]) ? "d-flex align-items-stretch flex-grow-1 p-0" : "flex-grow-1 container-p-y")'>
+            @RenderSection("ControlsSection", required: false)
             @RenderBody()
           </div>
           <!-- / Content -->
@@ -157,7 +159,7 @@
   <script src="~/vendor/libs/jquery/jquery.min.js"></script>
   <script src="~/vendor/libs/jstree/jstree.min.js"></script>
 
-  @RenderSection("Scripts", required: false)
+
 
 
 </body>
