@@ -1,98 +1,115 @@
 @{
-  ViewData["Title"] = "File Explorer";
-  Layout = "_ContentNavbarLayout";
+  ViewData["Title"] = "Filhanteraren";
+
+  // Disable layout elements for a clean fullscreen-like view
+  ViewData["container"] = "";
+  ViewData["isNavbar"] = false;
+  ViewData["isMenu"] = false;
+  ViewData["isFooter"] = false;
 }
 
-<!-- Syncfusion CSS -->
-<link href="https://cdn.syncfusion.com/ej2/20.4.38/material.css" rel="stylesheet" />
+@using Syncfusion.EJ2
+@using Syncfusion.EJ2.FileManager
 
-<!-- Syncfusion JS -->
-<script src="https://cdn.syncfusion.com/ej2/20.4.38/dist/ej2.min.js"></script>
+@{
+  var toolbarItems = new string[]
+  {
+"NewFolder", "SortBy", "Refresh", "Cut", "Copy", "Paste", "Delete", "Download", "Rename",
+"Selection", "View", "Details", "Edit"
+  };
 
-<!-- DocumentEditor package -->
-<script src="https://cdn.syncfusion.com/ej2/20.4.38/dist/ej2-documenteditor.min.js"></script>
+  var layoutMenu = new string[] { "SortBy", "View", "Refresh", "|", "Paste", "|", "NewFolder", "|", "Details", "|",
+"SelectAll", "Edit" };
+  var fileMenu = new string[] { "Cut", "Copy", "|", "Delete", "Download", "Rename", "Edit", "|", "Details" };
+}
 
-@Html.EJS().ScriptManager()
+@section ControlsSection {
+  <div class="filemanager-wrapper">
+    <ejs-filemanager id="filemanager" view="@ViewType.Details" created="onFileManagerCreated">
+      <e-filemanager-ajaxsettings url="/FileExplorer/FileOperations" downloadUrl="/FileExplorer/Download"
+        uploadUrl="/FileExplorer/Upload" getImageUrl="/FileExplorer/GetImage">
+      </e-filemanager-ajaxsettings>
 
-<div class="control-section" style="display:flex; gap: 1rem;">
-  <div class="sample-container" style="flex: 1;">
-    @Html.EJS().FileManager("filemanager").AjaxSettings(new Syncfusion.EJ2.FileManager.FileManagerAjaxSettings
-    {
-      Url = "/FileExplorer/FileOperations",
-        UploadUrl = "/FileExplorer/Upload",
-        DownloadUrl = "/FileExplorer/Download",
-        GetImageUrl = "/FileExplorer/GetImage"
-        }).FileOpen("onFileOpen").Render()
+      <e-filemanager-toolbarsettings items="toolbarItems"></e-filemanager-toolbarsettings>
+      <e-filemanager-contextmenusettings layout="layoutMenu" file="fileMenu"></e-filemanager-contextmenusettings>
+    </ejs-filemanager>
   </div>
-</div>
+}
 
-<!-- Modal for DocumentEditor -->
-<div id="documenteditor_modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-     background-color: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center;">
-  <div
-    style="background: white; width: 80%; height: 80%; position: relative; border-radius: 8px; box-shadow: 0 0 10px #000;">
-    <button id="closeModalBtn"
-      style="position: absolute; top: 10px; right: 15px; font-size: 2rem; border: none; background: none; cursor: pointer;">&times;</button>
-    <div id="documenteditor_container" style="width: 100%; height: 100%;"></div>
-  </div>
-</div>
-
-<script>
-  // Initialize bare DocumentEditor (no toolbar or ribbon)
-  var documentEditor = new ej.documenteditor.DocumentEditor({
-    isReadOnly: false,
-    enableSelection: true,
-    enableEditor: true,
-    enablePrint: true,
-    height: '100%',
-    // width: '100%' // width will be controlled by container
-  });
-  documentEditor.appendTo('#documenteditor_container');
-
-  // Close modal and clear document editor content
-  document.getElementById('closeModalBtn').addEventListener('click', function () {
-    document.getElementById('documenteditor_modal').style.display = 'none';
-    documentEditor.close();  // Clear document content
-  });
-
-  function onFileOpen(args) {
-    if (!args.fileDetails.isFile) return;
-
-    const fileName = args.fileDetails.name;
-    const filePath = args.fileDetails.filterPath + fileName;
-    const extension = fileName.split('.').pop().toLowerCase();
-
-    const docEditorExts = ['docx', 'sfdt', 'rtf'];
-
-    console.log("Selected file name:", fileName);
-
-    if (docEditorExts.includes(extension)) {
-      // Show modal
-      document.getElementById('documenteditor_modal').style.display = 'flex';
-
-      fetch('/FileExplorer/LoadDocument?path=' + encodeURIComponent(filePath))
-        .then(response => response.json())
-        .then(data => {
-          if (data.base64) {
-            let byteCharacters = atob(data.base64);
-            let byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            documentEditor.open(byteArray.buffer);
-          } else {
-            alert('Failed to load document.');
-            document.getElementById('documenteditor_modal').style.display = 'none';
-          }
-        });
-
-      args.cancel = true; // prevent default file open behavior
-    } else {
-      // Open other file types in new tab
-      const fileUrl = window.location.origin + '/FileExplorer/OpenFile?path=' + encodeURIComponent(filePath);
-      window.open(fileUrl, '_blank');
-      args.cancel = true;
+@section PageStyles {
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #f8f9fa;
     }
-  }
-</script>
+
+    .filemanager-wrapper {
+      height: 90vh;
+      width: 90vw;
+      margin: auto;
+      padding: 10px;
+      box-sizing: border-box;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #filemanager,
+    .e-filemanager {
+      height: 100% !important;
+      width: 100% !important;
+    }
+
+    /* Custom Edit Icon */
+    .e-filemanager .e-toolbar .e-tbar-btn .e-icons.e-edit-icon::before {
+      content: '\e7c3';
+      font-family: 'e-icons';
+    }
+  </style>
+}
+
+@section Scripts {
+  <script>
+    function onFileManagerCreated() {
+      var fileManager = document.getElementById("filemanager").ej2_instances[0];
+
+      // Expand the tree structure on load
+      fileManager.navigationpaneModule.treeObj.expandAll();
+
+      // Optional: assign icon for Edit
+      let toolbar = fileManager.toolbarModule.toolbarObj;
+      let editBtn = toolbar.items.find(item => item.text === "Edit");
+      if (editBtn) {
+        editBtn.prefixIcon = "e-icons e-edit-icon";
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var fileManager = document.getElementById("filemanager").ej2_instances[0];
+
+      fileManager.toolbarClick = function (args) {
+        if (args.item.text === "Edit") {
+          var selectedItems = fileManager.getSelectedFiles();
+          if (selectedItems.length === 0) {
+            alert("Please select a file to edit.");
+            return;
+          }
+
+          var selectedFile = selectedItems[0];
+
+          if (selectedFile.name.endsWith(".docx") || selectedFile.name.endsWith(".doc")) {
+            var publicDocUrl = "https://raw.githubusercontent.com/file-examples/file-examples/main/assets/documents/test.docx";
+            var officeViewerUrl = "https://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent(publicDocUrl);
+            window.open(officeViewerUrl, '_blank');
+          } else {
+            alert("Only Word (.doc/.docx) files can be edited.");
+          }
+        }
+      };
+    });
+  </script>
+}
