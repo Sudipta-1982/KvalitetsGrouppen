@@ -1,0 +1,134 @@
+@{
+  ViewData["Title"] = "Chart JS - Charts";
+}
+
+@section VendorScripts {
+  <script src="~/vendor/libs/chartjs/chartjs.js"></script>
+}
+@section PageScripts {
+  <script src="~/js/charts-chartjs.js"></script>
+}
+
+@* ************** Content ************** *@
+<div class="row">
+  <!-- Bar Charts -->
+  <div class="col-xl-6 col-12 mb-6">
+    <div class="card">
+      <div class="card-header header-elements">
+        <h5 class="card-title mb-0">Latest Statistics</h5>
+        <div class="card-action-element ms-auto py-0">
+          <div class="dropdown">
+            <button type="button" class="btn dropdown-toggle px-0" data-bs-toggle="dropdown" aria-expanded="false"><i
+                class="bx bx-calendar"></i></button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Today</a></li>
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Yesterday</a></li>
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last 7 Days</a></li>
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last 30 Days</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Current Month</a></li>
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last Month</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <canvas id="barChart" class="chartjs" data-height="400"></canvas>
+      </div>
+    </div>
+  </div>
+  <!-- /Bar Charts -->
+
+  <!-- Horizontal Bar Charts -->
+  <div class="col-xl-6 col-12 mb-6">
+    <div class="card">
+      <div class="card-header header-elements">
+        <div class="d-flex flex-column">
+          <p class="card-subtitle mb-1 mt-0">Balance</p>
+          <h5 class="card-title mb-0">$74,123</h5>
+        </div>
+        <div class="card-action-element ms-auto py-0">
+          <div class="dropdown">
+            <button type="button" class="btn dropdown-toggle px-0" data-bs-toggle="dropdown" aria-expanded="false"><i
+                class="bx bx-calendar"></i></button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Today</a></li>
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Yesterday</a></li>
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last 7 Days</a></li>
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last 30 Days</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Current Month</a></li>
+              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last Month</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <canvas id="horizontalBarChart" class="chartjs" data-height="400"></canvas>
+      </div>
+    </div>
+  </div>
+  <!-- /Horizontal Bar Charts -->
+
+  <!-- Line Charts -->
+  <div class="col-12 mb-6">
+    <div class="card">
+      <div class="card-header header-elements">
+        <div>
+          <h5 class="card-title mb-0">Statistics</h5>
+          <p class="card-subtitle my-0">Commercial networks and enterprises</p>
+        </div>
+        <div class="card-header-elements ms-auto py-0">
+          <h5 class="mb-0 me-4">$ 78,000</h5>
+          <span class="badge bg-label-secondary">
+            <i class='bx bx-up-arrow-alt bx-xs text-success'></i>
+            <span class="align-middle">37%</span>
+          </span>
+        </div>
+      </div>
+      <div class="card-body pt-2">
+        <canvas id="lineChart" class="chartjs" data-height="500"></canvas>
+      </div>
+    </div>
+  </div>
+  <!-- /Line Charts -->
+
+  <!-- Radar Chart -->
+  <div class="col-lg-6 col-12 mb-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Radar Chart</h5>
+      </div>
+      <div class="card-body pt-2">
+        <canvas class="chartjs" id="radarChart" data-height="355"></canvas>
+      </div>
+    </div>
+  </div>
+  <!-- /Radar Chart -->
+
+  <!-- Polar Area Chart -->
+  <div class="col-lg-6 col-12 mb-6">
+    <div class="card">
+      <div class="card-header header-elements">
+        <h5 class="card-title mb-0">Average Skills</h5>
+        <div class="card-header-elements ms-auto py-0 dropdown">
+          <button class="btn btn-text-secondary rounded-pill text-muted border-0 p-2 me-n1" type="button"
+            id="heat-chart-dd" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+              class="bx bx-dots-vertical-rounded bx-md text-muted"></i></button>
+          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="heat-chart-dd">
+            <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
+            <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
+            <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <canvas id="polarChart" class="chartjs" data-height="337"></canvas>
+      </div>
+    </div>
+  </div>
+  <!-- /Polar Area Chart -->

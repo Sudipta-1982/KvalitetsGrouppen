@@ -15,7 +15,7 @@ public class Page3 : Controller
   }
   public IActionResult Index()
   {
-    var listdata = _connectTest.TestConnection();
+    var listdata = _connectTest.GetDocumentsList();
     ViewBag.TreeViewData = listdata;
     return View();
 

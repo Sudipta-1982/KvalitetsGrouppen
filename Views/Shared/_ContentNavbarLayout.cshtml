@@ -22,7 +22,21 @@
   ViewData["containerNav"] = (ViewData["containerNav"] ?? "container-xxl");
 }
 
+@section VendorStyles {
+  @RenderSection("VendorStyles", required: false)
+}
 
+@section PageStyles {
+  @RenderSection("PageStyles", required: false)
+}
+
+@section VendorScripts {
+  @RenderSection("VendorScripts", required: false)
+}
+
+@section PageScripts {
+  @RenderSection("PageScripts", required: false)
+}
 @{
   bool isMenu = ViewData["isMenu"] != null && Convert.ToBoolean(ViewData["isMenu"]);
 }
@@ -34,15 +48,16 @@
   <meta charset="utf-8" />
   <title>@ViewData["Title"]</title>
 
-  @RenderSection("VendorStyles", required: false)
+  @* @RenderSection("VendorStyles", required: false)
+  @RenderSection("PageStyles", required: false) *@
 </head>
 
 <body>
   <div class="layout-wrapper layout-content-navbar @(isMenu ? "" : "layout-without-menu")">
     <div class="layout-container">
 
-      @RenderSection("VendorScripts", required: false)
-      @RenderSection("PageScripts", required: false)
+      @* @RenderSection("VendorScripts", required: false)
+      @RenderSection("PageScripts", required: false) *@
       @RenderSection("Scripts", required: false)
 
       @if (isMenu)
@@ -157,7 +172,7 @@
   <script src="~/vendor/libs/jquery/jquery.min.js"></script>
   <script src="~/vendor/libs/jstree/jstree.min.js"></script>
 
-  @RenderSection("Scripts", required: false)
+  @* @RenderSection("Scripts", required: false) *@
 
 
 </body>

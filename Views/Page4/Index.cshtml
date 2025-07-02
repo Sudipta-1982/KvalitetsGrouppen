@@ -1,52 +1,44 @@
 @{
-  ViewData["Title"] = "Customer List";
-  Layout = "_ContentNavbarLayout"; // Use your layout path
+  ViewData["Title"] = "Kundlista";
+  Layout = "_ContentNavbarLayout";
 }
 
-
-
+@section PageScripts {
+  <script src="~/js/app-user-list.js"></script>
+}
 
 <div class="container-xxl flex-grow-1 container-p-y">
-  <h4 class="fw-bold py-3 mb-4">Customer List</h4>
+  <h4 class="fw-bold py-3 mb-4">Kundlista</h4>
 
   <!-- Stats Cards -->
   <div class="row mb-4">
-    <div class="col-md-3">
-      <div class="card text-center">
-        <div class="card-body">
-          <h5 class="card-title">Customers</h5>
-          <h3>143</h3>
-          <small>Total Number</small>
+    @{
+      var stats = new[]
+      {
+        new { Title = "Kunder", Count = 143, Icon = "bx-group", Color = "primary" },
+        new { Title = "Inte nöjd", Count = 40, Icon = "bx-angry", Color = "danger" },
+        new { Title = "Nöjd", Count = 46, Icon = "bx-happy-alt", Color = "success" },
+        new { Title = "Ingen post", Count = 57, Icon = "bx-question-mark", Color = "secondary" },
+        };
+    }
+    @foreach (var stat in stats)
+    {
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="card-title mb-1">@stat.Title</h5>
+              <h3 class="mb-1">@stat.Count</h3>
+              <small>Totalt antal</small>
+            </div>
+            <div class="avatar-initial rounded bg-label-@stat.Color d-flex align-items-center justify-content-center"
+              style="width: 50px; height: 50px;">
+              <i class="bx @stat.Icon bx-lg"></i>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center">
-        <div class="card-body">
-          <h5 class="card-title">Not Satisfied</h5>
-          <h3>40</h3>
-          <small>Total Number</small>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center">
-        <div class="card-body">
-          <h5 class="card-title">Satisfied</h5>
-          <h3>46</h3>
-          <small>Total Number</small>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center">
-        <div class="card-body">
-          <h5 class="card-title">No Record</h5>
-          <h3>57</h3>
-          <small>Total Number</small>
-        </div>
-      </div>
-    </div>
+    }
   </div>
 
   <!-- Filters -->
@@ -54,48 +46,63 @@
     <div class="card-body">
       <form class="row g-3">
         <div class="col-md-4">
-          <select class="form-select">
-            <option selected>Select Classification</option>
-            <option>A Customer</option>
-            <option>B Customer</option>
-            <option>C Customer</option>
-            <option>D Customer</option>
-            <option>Not Active</option>
-            <option>Prospect</option>
+          <select class="form-select" name="classification">
+            <option selected disabled>Välj klassificering</option>
+            <option>A Kund</option>
+            <option>B Kund</option>
+            <option>C Kund</option>
+            <option>D Kund</option>
+            <option>Inte aktiv</option>
+            <option>Utsikt</option>
           </select>
         </div>
         <div class="col-md-4">
-          <select class="form-select">
-            <option selected>Select Satisfaction Level</option>
-            <option>Satisfied</option>
-            <option>Not Satisfied</option>
-            <option>No Record</option>
+          <select class="form-select" name="satisfaction">
+            <option selected disabled>Välj nöjdhetsnivå</option>
+            <option>Nöjd</option>
+            <option>Inte nöjd</option>
+            <option>Ingen post</option>
           </select>
         </div>
         <div class="col-md-4">
-          <select class="form-select">
-            <option selected> Select Evaluation Date</option>
-            <option>Last 3 months</option>
-            <option>Last 6 months</option>
-            <option>This Year</option>
-            <option>Last year</option>
-            <option>Last 3 years</option>
-            <option>All years </option>
-            <option>No evaluation date </option>
+          <select class="form-select" name="evalDate">
+            <option selected disabled>Välj utvärderingsdatum</option>
+            <option>Senaste 3 månaderna</option>
+            <option>Senaste 6 månaderna</option>
+            <option>I år</option>
+            <option>Förra året</option>
+            <option>Senaste 3 åren</option>
+            <option>Alla år</option>
+            <option>Inget utvärderingsdatum</option>
           </select>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Table + Actions -->
+  <!-- Table Section -->
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-      <input type="text" class="form-control w-25" placeholder="Search Customer" />
-      <div>
-        <button class="btn btn-outline-secondary me-2">Export</button>
+      <input type="text" class="form-control w-25" placeholder="Sök kund" />
+
+      <div class="d-flex align-items-center">
+        <!-- Export Buttons -->
+        <div class="btn-group me-2">
+          <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Exportera
+          </button>
+          <ul class="dropdown-menu">
+            <a class="dropdown-item" href="@Url.Action("ExportToExcel", "Page4")">Excel</a>
+            <a class="dropdown-item" href="@Url.Action("ExportToCsv", "Page4")">CSV</a>
+            <a class="dropdown-item" href="@Url.Action("ExportToPdf", "Page4")">PDF</a>
+
+          </ul>
+        </div>
+
+        <!-- Add Customer Button -->
         <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#addCustomerOffcanvas" role="button">
-          + Add New Customer
+          + Lägg till ny kund
         </a>
       </div>
     </div>
@@ -105,31 +112,34 @@
         <thead>
           <tr>
             <th></th>
-            <th>Customer</th>
-            <th>Classification</th>
-            <th>Contact</th>
-            <th>Email</th>
-            <th>Satisfaction</th>
-            <th>Actions</th>
+            <th>Kund</th>
+            <th>Klassificering</th>
+            <th>Kontakta</th>
+            <th>E-post</th>
+            <th>Tillfredsställelse</th>
+            <th>Åtgärder</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Sample Row -->
           <tr>
             <td><input type="checkbox" /></td>
             <td>
               <div class="d-flex align-items-center">
                 <img src="https://i.pravatar.cc/40" class="rounded-circle me-2" width="40" />
                 <div>
-                  <strong>Aski Interior Group</strong><br />
+                  <strong>LOGS TERMINAL AB</strong><br />
                   <small>551894187</small>
                 </div>
               </div>
             </td>
-            <td><span class="badge bg-success">A Customer</span></td>
-            <td>Kalle Karlsson</td>
-            <td>info@e-post.com</td>
-            <td><span class="badge bg-label-success">Satisfied</span></td>
+            <td>
+              <span class="d-flex align-items-center text-heading">
+                <i class="bx bx-user text-primary me-2"></i>B Kund
+              </span>
+            </td>
+            <td>Nils Jansson</td>
+            <td>info@logsterminal.se</td>
+            <td><span class="badge bg-label-danger">Inte nöjd</span></td>
             <td>
               <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
               <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
@@ -139,69 +149,459 @@
             </td>
           </tr>
           <!-- Repeat for other customers -->
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>
+              <div class="d-flex align-items-center">
+                <img src="https://i.pravatar.cc/41" class="rounded-circle me-2" width="40" />
+                <div>
+                  <strong>JOVI Konsult </strong><br />
+                  <small>1888231</small>
+                </div>
+              </div>
+            </td>
+            <td><span class="text-truncate d-flex align-items-center text-heading">
+                <i class="bx bx-user text-danger me-2"></i>Inte aktiv
+              </span></td>
+            <td>Ingrid Andersson</td>
+            <td>info@jovikonsult.se</td>
+            <td><span class="badge bg-label-secondary">Ingen post</span></td>
+            <td>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                  class="bx bx-dots-vertical-rounded"></i></button>
+            </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/42" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Kylmontage Redotem AB</strong><br />
+                <small>90123</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-success me-2"></i>A Kund
+            </span></td>
+          <td>Nils Pettersson</td>
+          <td>info@kylmontageredotem.se</td>
+          <td><span class="badge bg-label-success">Nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/43" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>NOA Mekaniska AB</strong><br />
+                <small>12335</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-success me-2"></i>A Kund
+            </span></td>
+          <td>Ingrid Karlsson</td>
+          <td>info@noamekaniska.se</td>
+          <td><span class="badge bg-label-success">Nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/44" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>LTI Isolering AB</strong><br />
+                <small>61237</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-warning me-2"></i>C Kund
+            </span></td>
+          <td>Björn Jansson</td>
+          <td>info@ltiisolering.se</td>
+          <td><span class="badge bg-label-success">Nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/45" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Kylmontage Swedac</strong><br />
+                <small>5809734</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-success me-2"></i>A Kund
+            </span></td>
+          <td>Erik Karlsson</td>
+          <td>info@kylmontageswedac.se</td>
+          <td><span class="badge bg-label-success">Nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/46" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Lästringe-Alma AB</strong><br />
+                <small>551894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-danger me-2"></i>Inte aktiv</span></td>
+          <td>Kristina Olsson</td>
+          <td>info@lastringealma.se</td>
+          <td><span class="badge bg-label-secondary">Ingen post</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/47" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>PR Development AB</strong><br />
+                <small>8764187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user" style="color: orange; margin-right: 0.5rem;"></i>D Kund
+            </span></td>
+          <td>Kristina Andersson</td>
+          <td>info@prdevelopment.se</td>
+          <td><span class="badge bg-label-danger">Inte nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/48" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Måla i Värmland AB</strong><br />
+                <small>551894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-danger me-2"></i>Inte aktiv</span></td>
+          <td>Björn Karlsson</td>
+          <td>info@malaivarmland.se</td>
+          <td><span class="badge bg-label-secondary">Ingen post</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/49" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>HMC Handmade Cars AB</strong><br />
+                <small>551894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-warning me-2"></i>C Kund
+            </span></td>
+          <td>Sofia Pettersson/td>
+          <td>info@hmccars.se</td>
+          <td><span class="badge bg-label-danger">Inte nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/50" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Areco Profiles AB</strong><br />
+                <small>54394187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-warning me-2"></i>C Kund
+            </span></td>
+          <td>Olof Gustafsson</td>
+          <td>info@arecoprofiles.se</td>
+          <td><span class="badge bg-label-danger">Inte nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/51" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Styrd borrning i Karlstad AB</strong><br />
+                <small>1894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-success me-2"></i>A Kund
+            </span></td>
+          <td>Erik Andersson</td>
+          <td>info@styrdborrningkarlstad.se</td>
+          <td><span class="badge bg-label-success">Nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/52" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Reviva Plastics</strong><br />
+                <small>81294187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-danger me-2"></i>Inte aktiv
+            </span></td>
+          <td>Emma Hansson</td>
+          <td>info@revivaplastics.se</td>
+          <td><span class="badge bg-label-secondary">Ingen post</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/53" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Gothia Specialservice AB</strong><br />
+                <small>551894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-primary me-2"></i>B Kund
+            </span></td>
+          <td>Eva Larsson</td>
+          <td>info@gothiaspecialservice.se</td>
+          <td><span class="badge bg-label-success">Nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/54" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>LRI Instrument AB</strong><br />
+                <small>1894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-success me-2"></i>A Kund
+            </span></td>
+          <td>Erik Johansson</td>
+          <td>info@lriinstrument.se</td>
+          <td><span class="badge bg-label-success">Nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/55" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Aluego AB</strong><br />
+                <small>55189</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-user text-warning me-2"></i>C Kund
+            </span></td>
+          <td>Mats Nilsson</td>
+          <td>info@aluego.se</td>
+          <td><span class="badge bg-label-success">Nöjd</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+
+
         </tbody>
       </table>
     </div>
   </div>
 </div>
 
-<!-- Offcanvas Structure -->
+<!-- Add Customer Offcanvas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="addCustomerOffcanvas" aria-labelledby="addCustomerLabel">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="addCustomerLabel">Add New Customer</h5>
+    <h5 class="offcanvas-title" id="addCustomerLabel">Lägg till ny kund</h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
     <form asp-action="AddCustomer" method="post" class="d-flex flex-column gap-3">
       <div>
-        <label class="form-label">Customer Name</label>
-        <input type="text" class="form-control" name="CustomerName" placeholder="Enter Customer Name" required />
+        <label class="form-label">Kundnamn</label>
+        <input type="text" class="form-control" name="CustomerName" required />
       </div>
       <div>
-        <label class="form-label">Customer ID</label>
-        <input type="text" class="form-control" name="CustomerID" placeholder="Enter Customer ID" required />
+        <label class="form-label">Kund-ID</label>
+        <input type="text" class="form-control" name="CustomerID" required />
       </div>
       <div>
-        <label class="form-label">Contact Person</label>
-        <input type="text" class="form-control" name="ContactPerson" placeholder="Enter Contact Person" />
+        <label class="form-label">Kontakt Person</label>
+        <input type="text" class="form-control" name="ContactPerson" />
       </div>
       <div>
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" name="Email" placeholder="Enter Email" />
+        <label class="form-label">E-post</label>
+        <input type="email" class="form-control" name="Email" />
       </div>
       <div>
-        <label class="form-label">Website</label>
-        <input type="url" class="form-control" name="Website" placeholder="Enter Website" />
+        <label class="form-label">Webbplats</label>
+        <input type="url" class="form-control" name="Website" />
       </div>
       <div>
-        <label class="form-label">Classification</label>
+        <label class="form-label">Klassificering</label>
         <select class="form-select" name="Classification">
-          <option selected disabled>Choose...</option>
-          <option value="A Customer">A Customer</option>
-          <option value="B Customer">B Customer</option>
-          <option value="C Customer">C Customer</option>
-          <option value="D Customer">D Customer</option>
-          <option value="Not Active">Not Active</option>
-          <option value="Prospect">Prospect</option>
+          <option selected disabled>Välja...</option>
+          <option value="A Customer">A Kund</option>
+          <option value="B Customer">B Kund</option>
+          <option value="C Customer">C Kund</option>
+          <option value="D Customer">D Kund</option>
+          <option value="Not Active">Inte aktiv</option>
+          <option value="Prospect">Utsikt</option>
         </select>
       </div>
       <div>
-        <label class="form-label">Satisfaction Level</label>
+        <label class="form-label">Nöjdhetsnivå</label>
         <select class="form-select" name="SatisfactionLevel">
-          <option selected disabled>Select...</option>
-          <option value="Satisfied">Satisfied</option>
-          <option value="Not Satisfied">Not Satisfied</option>
-          <option value="No Record">No Record</option>
+          <option selected disabled>Välja...</option>
+          <option value="Satisfied">Nöjd</option>
+          <option value="Not Satisfied">Inte nöjd</option>
+          <option value="No Record">Ingen post</option>
         </select>
       </div>
       <div>
-        <label class="form-label">Evaluation Date</label>
+        <label class="form-label">Utvärderingsdatum</label>
         <input type="date" class="form-control" name="EvaluationDate" />
       </div>
       <div class="d-flex justify-content-end gap-2 mt-4">
-        <button type="submit" class="btn" style="background-color:#5C7CFA; color:white;">Submit</button>
+        <button type="submit" class="btn" style="background-color:#5C7CFA; color:white;">Överlämna</button>
         <button type="button" class="btn" style="background-color: #FFE4E6; color: #FF0000;"
-          data-bs-dismiss="offcanvas">Cancel</button>
+          data-bs-dismiss="offcanvas">Avboka</button>
       </div>
     </form>
   </div>

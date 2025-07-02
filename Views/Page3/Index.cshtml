@@ -1,27 +1,27 @@
 @{
-  ViewData["Title"] = "Treeview - Extended UI";
+  ViewData["Title"] = "Manual Page";
 }
 @{
   var treeViewData = ViewBag.TreeViewData;
   var assetsPath = ViewBag.AssetsPath;
 }
 @section VendorStyles {
+  <link rel="stylesheet" href="~/vendor/libs/tagify/tagify.css" />
   <link rel="stylesheet" href="~/vendor/libs/jstree/jstree.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 }
 @section VendorScripts {
+  <script src="~/vendor/libs/tagify/tagify.js"></script>
   <script src="~/vendor/libs/jstree/jstree.js"></script>
 }
 @section PageScripts {
-  <script src="~/js/extended-ui-treeview.js"></script>
+ <script src="~/js/forms-tagify.js"></script>
+ <script src="~/js/extended-ui-treeview.js"></script>
 }
 @* ************** Content ************** *@
 
 
-
-
-
-
+<div>
   <!-- Tree View Section -->
   <div class="col-md-4 col-12">
     <div class="card mb-6">
@@ -36,20 +36,24 @@
           </div>
 
         </div>
-        <button id="addNew" onclick=AddNewDoc() class="btn btn-primary me-3 ">Add New Doc</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditDoc">
+        <button id="addNew" class="btn btn-primary me-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddDoc"
+          disabled>Add
+          New Doc</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditDoc"
+          data-doc-itemid=3345>
           Redigera Dokument
         </button>
 
       </div>
     </div>
+
     <div class="card">
       <h5 class="card-header">Manual</h5>
       <div class="card-body treeview-body" style="height:570px">
 
-        <ejs-treeview id="Treedata" showCheckBox="true" , allowDragAndDrop="true" allowTextWrap="true"
-          allowEditing="true" nodeSelected=getSelectedNode>
-          <e-treeview-fields dataSource="@treeViewData" id="id" parentId="pid" text="name" hasChildren="hasChild"
+        <ejs-treeview id="Treedata" showCheckBox="true" , allowDragAndDrop="true" allowTextWrap="true" allowEditing="true"
+          nodeSelected=getSelectedNode>
+          <e-treeview-fields dataSource="@treeViewData" id="id" parentId="pid" text="fullName" hasChildren="hasChild"
             isChecked="Checked" contextmenu="true" iconCss="icon" expanded="expanded"></e-treeview-fields>
         </ejs-treeview>
 
@@ -64,11 +68,9 @@
 
       <div class="card-body">
         <ejs-documenteditorcontainer id="container" serviceUrl="/api/DocumentEditor/" showPropertiesPane=false
-          enableToolbar=false created="onCreated" height="800px" enableEditor="true"
-          isReadOnly="true"></ejs-documenteditorcontainer>
+          enableToolbar=false created="onCreated" height="800px" enableEditor="true" isReadOnly="true">
+        </ejs-documenteditorcontainer>
 
-
-        </ejs-ejs-documenteditor>
       </div>
     </div>
   </div>
@@ -76,12 +78,116 @@
 <!-- Add this before the dialog component -->
 <div id="dialog-target"></div>
 
+<!-- Offcanvas for Adding a Document -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddDoc" aria-labelledby="offcanvasAddDocLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasAddDocLabel" class="offcanvas-title">Lägg till dokument</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-6">
+    <form id="addDocForm">
+      <div class="mb-3">
+
+
+        <ul class="nav nav-tabs mb-6 rounded-0">
+          <li class="nav-item">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-update">
+              <i class="bx bx-edit bx-sm me-1_5"></i>
+              <span class="align-middle">Add Doc</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-activity">
+              <i class="bx bx-bar-chart bx-sm me-1_5"></i>
+              <span class="align-middle">Extra Settings</span>
+            </button>
+          </li>
+        </ul>
+
+      </div>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab-update">
+          <div class="mb-6">
+            <label for="docName" class="form-label">Dokumentnamn</label>
+            <input type="text" class="form-control" id="docName" name="docName" placeholder="Ange dokumentnamn"
+              required>
+          </div>
+          <div class="mb-6">
+            <label for="docNr" class="form-label">ID-nummer</label>
+            @{
+                 Console.WriteLine("Parent Node ID");
+              // Try to get the parent node id from ViewBag or set a default value
+              var pnodeid = ViewBag.PNodeId ?? 0;
+              Console.WriteLine($"Parent Node ID: {pnodeid}");
+
+              var nextDocNr = $"{pnodeid}{((treeViewData != null && ((ICollection<object>)treeViewData).Count > 0) ? ViewBag.NodeNr + 1 : 1)}";
+            }
+            <input type="text" class="form-control" id="docNr" name="docNr" placeholder="Ange ID-nummer"
+              value="@nextDocNr" required>
+                   </div>
+          <div class="mb-6">
+            <label for="docType" class="form-label">Filtyp</label>
+            <select class="form-select" id="docType" name="docType" required>
+              <option value="Folder" data-icon="bi bi-folder">📁 Mapp</option>
+              <option value="Document" selected data-icon="bi bi-file-earmark-text">📝 Text</option>
+              <option value="Spreadsheet" data-icon="bi bi-file-earmark-excel">📊 Kalkyl</option>
+              <option value="Diagram" data-icon="bi bi-diagram-3">🔗 Flödesschema</option>
+            </select>
+                 </div>
+          <div class="mb-6">
+            <label for="docLayout" class="form-label">Orientering </label>
+            <select class="form-select" id="docLayout" name="docLayout" required>
+              <option value="Portrait" selected data-icon="bi bi-file-earmark-text">🧾 Stående</option>
+              <option value="Landscape" data-icon="bi bi-file-earmark-richtext">🖼️ Liggande</option>
+            </select>
+                 </div>
+          <div class="mb-6">
+            <label for="docPermission" class="form-label">Behörighet</label>
+            <select class="form-select" id="docPermission" name="docPermnission" required>
+              <option value="AllUsers" selected data-icon="bi bi-people">
+                👥 Alla användare med rättigheter kan redigera och publicera
+              </option>
+              <option value="Manager" data-icon="bi bi-person-badge">
+                👔 Endast ledningen kan redigera och publicera
+              </option>
+            </select>
+          </div>
+          <div class="mb-6">
+            <label for="docDescription" class="form-label">Beskrivning</label>
+            <textarea class="form-control" id="docDescription" name="docDescription"
+              placeholder="Ange dokumentbeskrivning"></textarea>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="tab-activity">
+          <!-- Extra settings can go here -->
+          <div class="mb-6">
+            <label for="docRestriction" class="form-label">Restrictions</label>
+            <select class="form-select" id="docRestriction" name="docRestriction" required>
+              <option value="None" selected>No restrictions</option>
+              <option value="NoExportPdf">Cannot export to PDF</option>
+              <option value="NoPrint">Cannot Print</option>
+            </select>
+
+
+          </div>
+          <div class="mb-6">
+            <label for="TagifyCustomInlineSuggestion" class="form-label">Custom Inline Suggestions</label>
+            <input id="TagifyCustomInlineSuggestion" name="TagifyCustomInlineSuggestion" class="form-control" placeholder="select technologies" value="Doc, Drawing,#1F3763 Spreadsheet">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Skapa</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 
 <!-- Syncfusion Dialog -->
-<ejs-dialog id="docEditorDialog" header="Word Processor" isModal=true visible="false" showCloseIcon="true" width="80%"
-  height="80%" target="#dialog-target" cssClass="custom-editor-dialog">
-  <e-content-template height="80%">
-    <div style="height:80%; width:80%;">
+<ejs-dialog id="docEditorDialog" header="Word Processor" isModal=true visible="false" showCloseIcon="true" width="100%"
+  height="100%" target="#dialog-target" cssClass="custom-editor-dialog">
+  <e-content-template height="100%">
+    <div style="height:100%; width:100%;">
       <!-- Container must fill height -->
       <div style="height:80%; width:80%;">
         <ejs-documenteditorcontainer id="docEditor" enableToolbar=true height="80%" serviceUrl="/api/DocumentEditor/"
@@ -92,7 +198,27 @@
   </e-content-template>
 </ejs-dialog>
 
+
+
 <script>
+  document.getElementById('addDocForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    var docName = document.getElementById('docName').value;
+    // TODO: Add your logic to save the document (AJAX, fetch, etc.)
+
+
+    // Optionally close the offcanvas
+    var offcanvasEl = document.getElementById('offcanvasAddDoc');
+    var bsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
+    bsOffcanvas.hide();
+
+    var treeObj = document.getElementById('Treedata').ej2_instances[0];
+
+    selNode = getSelectedNode();
+         alert('Document name: ' + docName);
+    treeObj.addNodes([{ id: 29, pid: selNode.id, name: docName }], treeObj.selectedNodes[0]);
+  });
 
   var documenteditor;
   function EditDoc() {
@@ -214,6 +340,7 @@
       // Get details of the first selected node
       var selectedNodeDetails = treeObj.getNode(selectedNodes[0]);
       console.log("Selected Node Details:", selectedNodeDetails);
+      document.getElementById('addNew').disabled = false;
       return selectedNodeDetails;
     } else {
       console.log("No node is selected.");
@@ -242,11 +369,19 @@
   }
 </script>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var input = document.querySelector('#TagifyCustomInlineSuggestion');
+    if (input) {
+      new Tagify(input);
+    }
+  });
+</script>
 
 
 
-  }
 
+<style>
   #docEditor {
     height: 100% !important;
   }
@@ -259,7 +394,6 @@
 
   .offcanvas {
     width: 80%;
-    s
   }
 
   #offcanvasDocEditorContainer {

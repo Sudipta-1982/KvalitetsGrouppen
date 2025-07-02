@@ -1,0 +1,306 @@
+@{
+  ViewData["Title"] = "Edit - Incident";
+}
+@model AspnetCoreMvcStarter.Models.Incident
+
+@section VendorStyles {
+  <link rel="stylesheet" href="~/vendor/libs/flatpickr/flatpickr.css">
+}
+
+@section VendorScripts {
+  <script src="~/vendor/libs/moment/moment.js"></script>
+  <script src="~/vendor/libs/flatpickr/flatpickr.js"></script>
+  <script src="~/vendor/libs/cleavejs/cleave.js"></script>
+  <script src="~/vendor/libs/cleavejs/cleave-phone.js"></script>
+}
+
+@section PageStyles {
+  <link rel="stylesheet" href="~/vendor/css/pages/app-incident.css" />
+}
+
+@section PageScripts {
+  <script src="~/js/offcanvas-add-payment.js"></script>
+  <script src="~/js/offcanvas-send-incident.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="~/lib/jquery.repeater/jquery.repeater.min.js"></script>
+  <script src="~/js/app-Incident-edit.js"></script>
+}
+
+
+<div class="row incident-preview">
+  <!-- Incident -->
+  <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-6">
+    <div class="card Incident-preview-card p-sm-12 p-6">
+      <div class="card-body Incident-preview-header rounded">
+        <div
+          class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column align-items-xl-center align-items-md-start align-items-sm-center align-items-start">
+          <div class="mb-xl-0 mb-6 text-heading">
+            <div class="d-flex svg-illustration mb-6 gap-2 align-items-center">
+              <span class="app-brand-logo demo">@await Html.PartialAsync("../_Partials/_Macros")</span>
+              <span class="app-brand-text demo text-heading fw-bold ms-50">@Model.Type</span>
+              <span class="badge rounded-pill bg-label-success">@Model.Status</span>
+              <span class="badge rounded-pill bg-label-info">@Model.DocName</span>
+              <span class="badge rounded-pill bg-label-waring">@Model.SecretLabel</span>
+            </div>
+            <p class="mb-2">Kund: @Model.Customer</p>
+            <p class="mb-2">Referens: @Model.Reference</p>
+          </div>
+          <div class="col-md-5 col-8 pe-0 ps-0 ps-md-2">
+
+            <dl class="row mb-0 gx-4">
+              <dt class="col-sm-5 mb-2 d-md-flex align-items-center justify-content-end">
+                <span class="h5 text-capitalize mb-0 text-nowrap">ID </span>
+              </dt>
+              <dd class="col-sm-7">
+                <input type="text" class="form-control" disabled placeholder="#0" value=@Model.Id id="invoiceId" />
+              </dd>
+              <dt class="col-sm-5 mb-2 d-md-flex align-items-center justify-content-end">
+                <span class="fw-normal">Inlämnat datum:</span>
+              </dt>
+              <dd class="col-sm-7">
+                <input type="text" class="form-control incident-date" placeholder="MM/DD/YYYY"
+                  value="@Model.DateReported" />
+              </dd>
+
+
+              <dt class="col-sm-5 d-md-flex align-items-center justify-content-end">
+                <span class="fw-normal">Stängd datum:</span>
+              </dt>
+              <dd class="col-sm-7">
+                <input type="text" class="form-control closed-date" placeholder="MM/DD/YYYY"
+                  value="@Model.DateClosed" />
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="card-body px-0">
+        <div class="row">
+          <div class="col-xl-9 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-6 mb-sm-0 mb-6">
+            <h6>Felbeskrivning</h6>
+            <textarea asp-for="Description" class="form-control mb-1" rows="8">@Model.Description</textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+
+          </div>
+          <div class="col-xl-3 col-md-12 col-sm-7 col-12 ">
+            <h6>Inlämnat av</h6>
+            <div class="avatar me-2 d-inline-block">
+              <img src="~/img/avatars/2.png" alt="Avatar" class="rounded-circle">
+            </div>
+            <select asp-for="SubmittedBy" class="form-select mb-1">
+              <option value="">Välj användare</option>
+              <option value="Pernilla Persson" selected="@("Pernilla Persson" == Model.SubmittedBy)">Pernilla Persson
+              </option>
+              <option value="Andreas">Andreas</option>
+              <option value="Alfie Solomons">Alfie Solomons</option>
+            </select>
+            <span asp-validation-for="SubmittedBy" class="text-danger"></span>
+            <textarea class="form-control mb-1" rows="1" readonly>Pernilla@kvalitetsgruppen.com</textarea>
+            <input type="text" class="form-control folowup-date" placeholder="MM/DD/YYYY" />
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body px-0">
+        <div class="row">
+          <div class="col-xl-9 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-6 mb-sm-0 mb-6">
+            <h6>Utredning Orsaksanalys</h6>
+            <textarea asp-for="Investigation" class="form-control mb-1" rows="8">@Model.Investigation</textarea>
+            <span asp-validation-for="Investigation" class="text-danger"></span>
+            <div>
+              <h6>Lägg till orsaker för statistiskanalys</h6>
+              <button type="button" class="btn btn-primary mb-2">+ LÄGG till ORSAKER</button>
+              <select class="form-select mb-1">
+                <option value="">Orsaker</option>
+                <option value="Cause1">Cause 1 </option>
+                <option value="Cause2">Cause 2</option>
+                <option value="Cause3">Different cause</option>
+              </select>
+            </div>
+            <div>
+              <h5>Vem orkasakade problemet</h5>
+              <p class="mb-1"> @Model.Supplier </p>
+            </div>
+            <div class="alert alert-warning d-flex align-items-center" role="alert">
+              <span class="alert-icon rounded-circle">
+                <i class="bx bx-xs bx-alert-triangle"></i>
+              </span>
+              2025-03-01 Reklamation moment Leverantör Incident-preview-header gjorts"
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-12 col-sm-7 col-12 ">
+            <h6>Genomfört av:</h6>
+            <div class="avatar me-2 d-inline-block">
+              <img src="~/img/avatars/3.png" alt="Avatar" class="rounded-circle">
+            </div>
+            <p class="mb-1">Andreas </p>
+            <p class="mb-1">Andreas@kvalitetsgruppen.com</p>
+            <p class="mb-1">@Model.DateFollowUp</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card-body px-0">
+        <div class="row">
+          <div class="col-xl-9 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-6 mb-sm-0 mb-6">
+            <h6>Korrigerande åtgärder</h6>
+            <textarea asp-for="CorrectiveMeasures" class="form-control mb-1"
+              rows="8">@Model.CorrectiveMeasures</textarea>
+            <span asp-validation-for="CorrectiveMeasures" class="text-danger"></span>
+          </div>
+          <div class="col-xl-3 col-md-12 col-sm-7 col-12 ">
+            <div class="avatar me-2 d-inline-block">
+              <img src="~/img/avatars/5.png" alt="Avatar" class="rounded-circle">
+            </div>
+            <p class="mb-1">Tobias </p>
+            <p class="mb-1">Tobias@kvalitetsgruppen.com</p>
+            <p class="mb-1">@Model.DateFollowUp</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="card-body px-0">
+        <div class="row">
+          <div class="col-xl-9 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-6 mb-sm-0 mb-6">
+            <h6>Förebyggande åtgärder</h6>
+            <textarea asp-for="PreventingMeasures" class="form-control mb-1"
+              rows="8">@Model.PreventingMeasures</textarea>
+            <span asp-validation-for="PreventingMeasures" class="text-danger"></span>
+
+            <div class="alert alert-outline-info d-flex align-items-center" role="alert">
+              <span class="alert-icon rounded-pill">
+                <i class="bx bx-xs bx-alert-triangle"></i>
+              </span>
+              Ny rutin för hantering av kundbokningar, se dokument 7.3.1
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-12 col-sm-7 col-12 ">
+            <h6>Beslutat av:</h6>
+            <div class="avatar me-2 d-inline-block">
+              <img src="~/img/avatars/5.png" alt="Avatar" class="rounded-circle">
+            </div>
+            <p class="mb-1">Tobias </p>
+            <p class="mb-1">Tobias@kvalitetsgruppen.com</p>
+            <p class="mb-1">@Model.DateFollowUp</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="card-body px-0">
+        <div class="row">
+          <div class="col-xl-9 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-6 mb-sm-0 mb-6">
+            <h6>Uppföljning</h6>
+            <textarea asp-for="FollowUp" class="form-control mb-1" rows="8">@Model.FollowUp</textarea>
+            <span asp-validation-for="FollowUp" class="text-danger"></span>
+          </div>
+          <div class="col-xl-3 col-md-12 col-sm-7 col-12 ">
+            <h6>Genomfört av:</h6>
+            <div class="avatar me-2 d-inline-block">
+              <img src="~/img/avatars/4.png" alt="Avatar" class="rounded-circle">
+            </div>
+            <p class="mb-1">Viorica </p>
+            <p class="mb-1">Viorica@kvalitetsgruppen.com</p>
+            <p class="mb-1">@Model.DateFollowUp</p>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div>
+        <form class="source-item">
+          <div class="mb-4" data-repeater-list="group-a">
+            <div class="repeater-wrapper pt-0 pt-md-9" data-repeater-item>
+              <div class="d-flex border rounded position-relative pe-0">
+                <div class="row w-100 p-6 g-6">
+                  <div class="col-md-6 col-12 mb-md-0 mb-3">
+                    <p class="h6 repeater-title">KOSTNADER</p>
+                    <select class="form-select item-details mb-6" name="group-a[][CostType]">
+                      <option value="Administration"> Administration</option>
+                      <option value="Purchase">Inköp</option>
+                      <option value="workingHours">Arbetstid</option>
+                      <option value="App Customization"> App Customization</option>
+                      <option value="ABC Template">ABC Template</option>
+                      <option value="App Development">App Development</option>
+                    </select>
+                    <textarea class="form-control" rows="2" placeholder="Material"
+                      name="group-a[][Material]"></textarea>
+                  </div>
+                  <div class="col-md-3 col-12 mb-md-0 mb-4">
+                    <p class="h6 repeater-title">TIMMAR</p>
+                    <input type="text" class="form-control incident-item-work-hours mb-5" value="24" placeholder="24"
+                      min="12" name="group-a[][WorkHours]" />
+                  </div>
+
+                  <div class="col-md-2 col-12 mb-md-0 mb-4">
+                    <p class="h6 repeater-title">ANTAL</p>
+                    <input type="text" class="form-control incident-item-qty" value="1" placeholder="1" min="1" max="50"
+                      name="group-a[][Qty]" />
+                  </div>
+                  <div class="col-md-1 col-12 pe-0 mt-8">
+                    <p class="h6 repeater-title">SUMMA</p>
+                    <p class="mb-0 text-heading">$24.00</p>
+                  </div>
+                </div>
+                <div class="d-flex flex-column align-items-center justify-content-between border-start p-2">
+                  <i class="bx bx-x bx-lg cursor-pointer" data-repeater-delete></i>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <button type="button" class="btn btn-sm btn-primary" data-repeater-create>
+                <i class='bx bx-plus bx-xs me-1_5'></i>Lägg till rad
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <hr class="mt-0 mb-6">
+      <div class="card-body p-0">
+        <div class="row">
+          <div class="col-12">
+            <div>
+              <label for="note" class="fw-medium text-heading mb-1">Anteckningar:</label>
+              <textarea class="form-control" rows="3" id="note">...</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Incident -->
+
+  <!-- Incident Actions -->
+  <div class="col-xl-3 col-md-4 col-12 incident-actions">
+    <div class="card">
+      <div class="card-body">
+        <button class="btn btn-primary d-grid w-100 mb-4" data-bs-toggle="offcanvas" data-bs-target="#SaveIncident">
+          <span class="d-flex align-items-center justify-content-center text-nowrap"><i
+              class="bx bx-paper-plane bx-sm me-2"></i>SPARA</span>
+        </button>
+        <button class="btn btn-label-secondary d-grid w-100 mb-4">
+          LADDA NER
+        </button>
+        <div class="d-flex mb-4">
+          <a class="btn btn-label-secondary d-grid w-100 mb-4" target="_blank" href="/Incident/Print">
+            SKRIV UT
+          </a>
+        </div>
+        <button class="btn btn-success d-grid w-100" data-bs-toggle="offcanvas" data-bs-target="#CloseCase">
+          <span class="d-flex align-items-center justify-content-center text-nowrap">STÄNG ÄRENDE</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /Incident Actions -->
+</div>
+
+<!-- Offcanvas -->
+@* @await Html.PartialAsync("../_Partials/_Offcanvas/OffcanvasSendIncident")
+@await Html.PartialAsync("../_Partials/_Offcanvas/OffcanvasAddPayment") *@
+<!-- /Offcanvas -->

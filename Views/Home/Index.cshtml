@@ -1,3 +1,28 @@
 @{
   ViewData["Title"] = "Home Page";
 }
+
+@section VendorStyles {
+  <link rel="stylesheet" href="~/vendor/libs/tagify/tagify.css " />
+}
+
+@section VendorScripts {
+  <script src="~/vendor/libs/tagify/tagify.js"></script>
+
+}
+
+@section PageScripts {
+  <script src="~/js/forms-tagify.js"></script>
+}
+<div>
+  <label for="TagifyBasic" class="form-label">Basic</label>
+  <input id="TagifyBasic" class="form-control" name="TagifyBasic" value="Tag1, Tag2, Tag3" />
+</div>
+@* <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var input = document.querySelector('#TagifyBasic');
+    if (input) {
+      new Tagify(input);
+    }
+  });
+</script> *@

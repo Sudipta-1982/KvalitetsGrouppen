@@ -1,5 +1,631 @@
 @{
-  ViewData["Title"] = "Suppliers";
+  ViewData["Title"] = "Leverantörer";
+  Layout = "_ContentNavbarLayout";
 }
 
-<a asp-controller="Document" asp-action="Edit">Not yet created.....</a>
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">Leverantörer</h4>
+
+  <!-- Stats Cards -->
+  <div class="row mb-4">
+    <!-- Suppliers Card -->
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div class="text-left">
+            <h5 class="card-title mb-1">Leverantörer</h5>
+            <h3 class="mb-1">143</h3>
+            <small>Totalt antal</small>
+          </div>
+          <div class="avatar-initial rounded bg-label-primary d-flex align-items-center justify-content-center"
+            style="width: 50px; height: 50px;">
+            <i class="bx bx-store bx-lg"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Not Qualified Card -->
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div class="text-left">
+            <h5 class="card-title mb-1">Inte kvalificerad</h5>
+            <h3 class="mb-1">40</h3>
+            <small>Totalt antal</small>
+          </div>
+          <div class="avatar-initial rounded bg-label-danger d-flex align-items-center justify-content-center"
+            style="width: 50px; height: 50px;">
+            <i class="bx bx-x-circle bx-lg"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Qualified Card -->
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div class="text-left">
+            <h5 class="card-title mb-1">Kvalificerad</h5>
+            <h3 class="mb-1">46</h3>
+            <small>Totalt antal</small>
+          </div>
+          <div class="avatar-initial rounded bg-label-success d-flex align-items-center justify-content-center"
+            style="width: 50px; height: 50px;">
+            <i class="bx bx-check-circle bx-lg"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Record Card -->
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div class="text-left">
+            <h5 class="card-title mb-1">Ingen post</h5>
+            <h3 class="mb-1">57</h3>
+            <small>Totalt antal</small>
+          </div>
+          <div class="avatar-initial rounded bg-label-secondary d-flex align-items-center justify-content-center"
+            style="width: 50px; height: 50px;">
+            <i class="bx bx-file-find bx-lg"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form class="row g-3">
+        <div class="col-md-4">
+          <select class="form-select">
+            <option selected>Välj klassificering</option>
+            <option>Nivå 1 - Huvudnivå </option>
+            <option>Nivå 2 - Sekundär</option>
+            <option>Nivå 3 - Administrativ</option>
+            <option>Nivå 4 - Övrigt</option>
+            <option>Inte aktiv</option>
+            <option>Utsikt</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <select class="form-select">
+            <option selected>Välj utvärderingsnivå</option>
+            <option>Kvalificerad</option>
+            <option>Inte kvalificerad</option>
+            <option>Ingen post</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <select class="form-select">
+            <option selected>Välj utvärderingsdatum</option>
+            <option>Senaste 3 månaderna</option>
+            <option>Senaste 6 månaderna</option>
+            <option>I år</option>
+            <option>Förra året</option>
+            <option>Senaste 3 åren</option>
+            <option>Alla år</option>
+            <option>Inget utvärderingsdatum</option>
+          </select>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Table & Add Button -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <input type="text" class="form-control w-25" placeholder="Sök leverantör" />
+      <div>
+        <button class="btn btn-outline-secondary me-2">Exportera</button>
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#addSupplierOffcanvas">
+          + Lägg till ny leverantör
+        </button>
+      </div>
+    </div>
+    <div class="table-responsive text-nowrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Leverantör</th>
+            <th>Klassificering</th>
+            <th>Kontakta</th>
+            <th>E-post</th>
+            <th>Utvärdering</th>
+            <th>Åtgärder</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>
+              <div class="d-flex align-items-center">
+                <img src="https://i.pravatar.cc/40" class="rounded-circle me-2" width="40" />
+                <div>
+                  <strong>Speedledger AB</strong><br />
+                  <small>551894187</small>
+                </div>
+              </div>
+            </td>
+            <td><span class="text-truncate d-flex align-items-center text-heading">
+                <i class="bx bx-building text-warning me-2"></i>Nivå 3 – Administrativ
+              </span>
+
+            </td>
+            <td> Erik Svensson</td>
+            <td>info@speedledger.se</td>
+            <td><span class="badge bg-label-success">Kvalificerad</span></td>
+            <td>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                  class="bx bx-dots-vertical-rounded"></i></button>
+            </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>
+              <div class="d-flex align-items-center">
+                <img src="https://i.pravatar.cc/41" class="rounded-circle me-2" width="40" />
+                <div>
+                  <strong>Inet AB</strong><br />
+                  <small>1888231</small>
+                </div>
+              </div>
+            </td>
+            <td><span class="text-truncate d-flex align-items-center text-heading">
+                <i class="bx bx-buildings text-primary me-2"></i>Nivå 2 – Sekundär
+              </span></td>
+            <td>Monica Gustafsson</td>
+            <td>info@inet.se</td>
+            <td><span class="badge bg-label-success">Kvalificerad</span></td>
+            <td>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+              <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                  class="bx bx-dots-vertical-rounded"></i></button>
+            </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/42" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Talex AB</strong><br />
+                <small>90123</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building-house text-success me-2"></i>Nivå 1 – Huvudnivå
+            </span></td>
+          <td> Ingrid Gustafsson</td>
+          <td>info@talex.se</td>
+          <td><span class="badge bg-label-success">Qualified</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/43" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>IP System Sverige AB</strong><br />
+                <small>12335</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-buildings text-primary me-2"></i>Nivå 2 – Sekundär
+            </span></td>
+          <td> Hans Bengtsson</td>
+          <td>info@ipsystem.se</td>
+          <td><span class="badge bg-label-success">Kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/44" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Postnord</strong><br />
+                <small>61237</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building text-orange me-2"></i>Nivå 4 – Övriga
+            </span></td>
+          <td> Olof Nilsson</td>
+          <td>info@postnord.se</td>
+          <td><span class="badge bg-label-danger">Inte kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/45" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>DHL</strong><br />
+                <small>5809734</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building text-orange me-2"></i>Nivå 4 – Övriga
+            </span></td>
+          <td>Johan Svensson</td>
+          <td>info@dhl.se</td>
+          <td><span class="badge bg-label-success">Kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/46" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Google Sverige AB</strong><br />
+                <small>551894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building text-orange me-2"></i>Nivå 4 – Övriga
+            </span></td>
+          <td>Maria Persson</td>
+          <td>info@google.se</td>
+          <td><span class="badge bg-label-success">Kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/47" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Payson</strong><br />
+                <small>8764187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-buildings text-primary me-2"></i>Nivå 2 – Sekundär
+            </span></td>
+          <td> Hans Karlsson</td>
+          <td>info@payson.se</td>
+          <td><span class="badge bg-label-success">Kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/48" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Microsoft Azure</strong><br />
+                <small>551894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building-house text-success me-2"></i>Nivå 1 – Huvudnivå
+            </span></td>
+          <td>Johan Andersson</td>
+          <td>info@microsoftazure.se</td>
+          <td><span class="badge bg-label-success">Kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/49" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>One.com</strong><br />
+                <small>551894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building-house text-success me-2"></i>Nivå 1 – Huvudnivå
+            </span></td>
+          <td> Johan Nilsson</td>
+          <td>info@one.se</td>
+          <td><span class="badge bg-label-success">Kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/50" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Dustin Group AB</strong><br />
+                <small>54394187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building-house text-success me-2"></i>Nivå 1 – Huvudnivå
+            </span></td>
+          <td>Erik Andersson</td>
+          <td>info@dustin.se</td>
+          <td><span class="badge bg-label-success">Kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/51" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Klarna</strong><br />
+                <small>1894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building-house text-success me-2"></i>Nivå 1 – Huvudnivå
+            </span></td>
+          <td>Lars Svensson</td>
+          <td>info@klarna.se</td>
+          <td><span class="badge bg-label-success">Kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/52" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>HI3G Access AB</strong><br />
+                <small>81294187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building-house text-success me-2"></i>Nivå 1 – Huvudnivå
+            </span></td>
+          <td>Peter Olsson</td>
+          <td>info@hi3g.se</td>
+          <td><span class="badge bg-label-success">kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/53" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>MVFID SRL</strong><br />
+                <small>551894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building-house text-success me-2"></i>Nivå 1 – Huvudnivå
+            </span></td>
+          <td>Viorica Lidia Craciun</td>
+          <td>mailto:craciun.vioricalidia@gmail.com</td>
+          <td><span class="badge bg-label-success">Kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/54" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Innovative Minds AB</strong><br />
+                <small>1894187</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building text-orange me-2"></i>Nivå 4 – Övriga
+            </span></td>
+          <td>Maria Andersson</td>
+          <td>maria.andersson@innovativemindsab.com</td>
+          <td><span class="badge bg-label-danger">Inte kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+          <tr></tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="https://i.pravatar.cc/55" class="rounded-circle me-2" width="40" />
+              <div>
+                <strong>Aluego AB</strong><br />
+                <small>55189</small>
+              </div>
+            </div>
+          </td>
+          <td><span class="text-truncate d-flex align-items-center text-heading">
+              <i class="bx bx-building text-warning me-2"></i>Nivå 3 – Administrativ
+            </span></td>
+          <td>Mats Nilsson</td>
+          <td>info@aluego.se</td>
+          <td><span class="badge bg-label-danger">Inte kvalificerad</span></td>
+          <td>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-globe"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-trash"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i class="bx bx-show"></i></button>
+            <button class="btn btn-icon btn-sm btn-outline-secondary"><i
+                class="bx bx-dots-vertical-rounded"></i></button>
+          </td>
+          </tr>
+          <!-- Repeat for other customers -->
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add Supplier Offcanvas (Unique to this page) -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addSupplierOffcanvas" aria-labelledby="addCustomerLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="addSupplierLabel">Lägg till ny leverantör</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form asp-action="AddCustomer" method="post" class="d-flex flex-column gap-3">
+      <div>
+        <label class="form-label">Leverantörsnamn</label>
+        <input type="text" class="form-control" name="CustomerName" placeholder="Ange leverantörsnamn" required />
+      </div>
+      <div>
+        <label class="form-label">Leverantörs-ID</label>
+        <input type="text" class="form-control" name="CustomerID" placeholder="Ange leverantörs-ID" required />
+      </div>
+      <div>
+        <label class="form-label">Kontaktperson</label>
+        <input type="text" class="form-control" name="ContactPerson" placeholder="Ange kontaktperson" />
+      </div>
+      <div>
+        <label class="form-label">E-post</label>
+        <input type="email" class="form-control" name="Email" placeholder="Ange e-postadress" />
+      </div>
+      <div>
+        <label class="form-label">Webbplats</label>
+        <input type="url" class="form-control" name="Website" placeholder="Ange webbplats" />
+      </div>
+      <div>
+        <label class="form-label">Klassificering</label>
+        <select class="form-select" name="Classification">
+          <option selected disabled>Välja...</option>
+          <option value="A Customer">Nivå 1 - Huvudnivå</option>
+          <option value="B Customer">Nivå 2 - Sekundär</option>
+          <option value="C Customer">Nivå 3 - Administrativ</option>
+          <option value="D Customer">Nivå 4 - Övrigt</option>
+          <option value="Not Active">Inte aktiv</option>
+          <option value="Prospect">Utsikt</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Utvärderingsnivå</label>
+        <select class="form-select" name="SatisfactionLevel">
+          <option selected disabled>Välja...</option>
+          <option value="Satisfied">Kvalificerad</option>
+          <option value="Not Satisfied">Inte kvalificerad</option>
+          <option value="No Record">Ingen post</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Utvärderingsdatum</label>
+        <input type="date" class="form-control" name="EvaluationDate" />
+      </div>
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button type="submit" class="btn" style="background-color:#5C7CFA; color:white;">Överlämna</button>
+        <button type="button" class="btn" style="background-color: #FFE4E6; color: #FF0000;"
+          data-bs-dismiss="offcanvas">Avboka</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+ 

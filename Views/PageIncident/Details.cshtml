@@ -182,9 +182,11 @@
           <a class="btn btn-label-secondary d-grid w-100 me-4" target="_blank" href="/Incident/Print">
             Print
           </a>
-          <a href="/Incident/Edit" class="btn btn-label-secondary d-grid w-100">
+          <a href="@Url.Action("Edit", "PageIncident", new { id = Model.DocID })"
+            class="btn btn-label-secondary d-grid w-100">Edit</a>
+          @* <a href="/PageIncident/Edit/"@Model.DocID class="btn btn-label-secondary d-grid w-100">
             Edit
-          </a>
+          </a> *@
         </div>
         <button class="btn btn-success d-grid w-100" data-bs-toggle="offcanvas" data-bs-target="#addPaymentOffcanvas">
           <span class="d-flex align-items-center justify-content-center text-nowrap"><i

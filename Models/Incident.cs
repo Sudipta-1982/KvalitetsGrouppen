@@ -48,6 +48,10 @@ namespace AspnetCoreMvcStarter.Models
     [StringLength(100)]
     public string OperatedBy { get; set; } = string.Empty;
 
+
+    [StringLength(100)]
+    public string SubmittedBy { get; set; } = string.Empty;
+
     public int? CustomerID { get; set; }
 
     public int? SupplierID { get; set; }
@@ -75,5 +79,12 @@ namespace AspnetCoreMvcStarter.Models
 
     [StringLength(1000)]
     public string Notes { get; set; } = string.Empty;
+
+
+    [StringLength(500)]
+    public string CorrectiveMeasures { get; set; } = string.Empty;
+
+    [StringLength(500)]
+    public string Investigation { get; set; } = string.Empty;
   }
 }
